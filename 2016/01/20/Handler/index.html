@@ -101,10 +101,12 @@
 <meta property="og:site_name" content="zEcong Chai&#39;s Blog">
 <meta property="og:description" content="##Android的消息机制分析Android的消息机制分析实际上就是Handler的运行机制，主要包括Handler、MessageQueue和Looper。而在Looper工作原理中使用到了一个重要的类：ThreadLocal。为了更好的理解Looper的工作原理，我们先来了解一下ThreadLocal。 ##ThreadLocalThreadLocal是线程内部的数据存储类，通过它可以在指定">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-19T15:45:45.163Z">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1932104-85ad5bcb1f5d3c85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-07-19T15:48:55.016Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android的消息机制">
 <meta name="twitter:description" content="##Android的消息机制分析Android的消息机制分析实际上就是Handler的运行机制，主要包括Handler、MessageQueue和Looper。而在Looper工作原理中使用到了一个重要的类：ThreadLocal。为了更好的理解Looper的工作原理，我们先来了解一下ThreadLocal。 ##ThreadLocalThreadLocal是线程内部的数据存储类，通过它可以在指定">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1932104-85ad5bcb1f5d3c85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -338,7 +340,9 @@
 <p><strong>Looper.loop()</strong>会让当前线程进入一个无限循环，会调用MessageQueue的<strong>next</strong>方法来获取新消息，而<strong>next</strong>是一个阻塞操作，当没有新消息时，这也导致了<strong>loop</strong>方法也会阻塞。如果MessageQueue的<strong>next</strong>方法返回了新消息，Looper会回调<strong>msg.target.dispatchMessage(msg)</strong>方法，而Hander的<strong>dispatchMessage</strong>方法是执行在创建Hander时所使用的Looper中，这样就成功的将代码逻辑切换到指定线程中执行。</p>
 <p>##Handler<br>Handler的构造方法，会首先得到当前线程中保存的Looper实例，进而与Looper实例中的MessageQueue想关联。</p>
 <p>Handler的sendMessage方法，会给msg的target赋值为handler自身，然后加入MessageQueue中。Message的callback是一个Runnable对象，实际上就是Handler的<strong>post</strong>方法所传递的Runnable参数。</p>
-<p>在构造Handler实例时，我们会重写<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">![2017-12-25 15.07.12.png](http://upload-images.jianshu.io/upload_images/1932104-85ad5bcb1f5d3c85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</span><br><span class="line">-----------</span><br><span class="line">##注意事项</span><br><span class="line">注意：在实际开发过程中，handler引起的内存泄漏以及解决办法</span><br><span class="line">原因：非静态内部类持有外部类的匿名引用，导致外部activity无法被释放</span><br><span class="line"></span><br><span class="line">解决办法</span><br><span class="line">1，handler内部持有外部activity的弱引用，</span><br><span class="line">2，把handler改为静态内部类，</span><br><span class="line">3，在ondestroy方法中调用```mHandler.removeCallback()</span><br></pre></td></tr></table></figure></p>
+<p>在构造Handler实例时，我们会重写<strong>handleMessage</strong>方法，也就是<strong>msg.target.dispatchMessage(msg)</strong>最终调用的方法。</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><img src="http://upload-images.jianshu.io/upload_images/1932104-85ad5bcb1f5d3c85.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="2017-12-25 15.07.12.png"></h2><p>##注意事项<br>注意：在实际开发过程中，handler引起的内存泄漏以及解决办法<br>原因：非静态内部类持有外部类的匿名引用，导致外部activity无法被释放</p>
+<p>解决办法<br>1，handler内部持有外部activity的弱引用，<br>2，把handler改为静态内部类，<br>3，在ondestroy方法中调用<strong>mHandler.removeCallback()</strong></p>
 
       
     </div>
@@ -427,8 +431,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -472,6 +485,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">1.</span> <span class="nav-text"></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
