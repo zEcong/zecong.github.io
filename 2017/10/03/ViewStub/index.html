@@ -94,19 +94,17 @@
 
 
 
-<meta name="description" content="#Activity启动的概要流程 用户从Launcher程序点击应用图标可启动应用的入口Activity，Activity启动时需要多个进程之间的交互，Android系统中有一个zygote进程专用于孵化Android框架层和应用层程序的进程。还有一个system_server进程，该进程里运行了很多binder service，例如ActivityManagerService，PackageMa">
+<meta name="description" content="ViewStub 是一个不可见的，大小为0的View,最佳用途就是实现View的延迟加载，避免资源浪费，在需要的时候才加载View。在Android性能优化中广泛使用。在使用viewstub的时候要注意一点，viewstub只能inflate一次，而且setVisibility也会间接的调用到inflate，重复inflate会抛出异常：1java.lang.IllegalStateExcepti">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Activity启动的概要流程">
-<meta property="og:url" content="http://yoursite.com/2017/04/24/Activity启动的概要流程/index.html">
+<meta property="og:title" content="避免ViewStub重复填充">
+<meta property="og:url" content="http://yoursite.com/2017/10/03/ViewStub/index.html">
 <meta property="og:site_name" content="zEcong Chai&#39;s Blog">
-<meta property="og:description" content="#Activity启动的概要流程 用户从Launcher程序点击应用图标可启动应用的入口Activity，Activity启动时需要多个进程之间的交互，Android系统中有一个zygote进程专用于孵化Android框架层和应用层程序的进程。还有一个system_server进程，该进程里运行了很多binder service，例如ActivityManagerService，PackageMa">
+<meta property="og:description" content="ViewStub 是一个不可见的，大小为0的View,最佳用途就是实现View的延迟加载，避免资源浪费，在需要的时候才加载View。在Android性能优化中广泛使用。在使用viewstub的时候要注意一点，viewstub只能inflate一次，而且setVisibility也会间接的调用到inflate，重复inflate会抛出异常：1java.lang.IllegalStateExcepti">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1932104-613089365b49d3d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-07-13T08:39:12.309Z">
+<meta property="og:updated_time" content="2018-07-19T08:48:24.144Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Activity启动的概要流程">
-<meta name="twitter:description" content="#Activity启动的概要流程 用户从Launcher程序点击应用图标可启动应用的入口Activity，Activity启动时需要多个进程之间的交互，Android系统中有一个zygote进程专用于孵化Android框架层和应用层程序的进程。还有一个system_server进程，该进程里运行了很多binder service，例如ActivityManagerService，PackageMa">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1932104-613089365b49d3d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="避免ViewStub重复填充">
+<meta name="twitter:description" content="ViewStub 是一个不可见的，大小为0的View,最佳用途就是实现View的延迟加载，避免资源浪费，在需要的时候才加载View。在Android性能优化中广泛使用。在使用viewstub的时候要注意一点，viewstub只能inflate一次，而且setVisibility也会间接的调用到inflate，重复inflate会抛出异常：1java.lang.IllegalStateExcepti">
 
 
 
@@ -135,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/04/24/Activity启动的概要流程/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/10/03/ViewStub/"/>
 
 
 
 
 
-  <title>Activity启动的概要流程 | zEcong Chai's Blog</title>
+  <title>避免ViewStub重复填充 | zEcong Chai's Blog</title>
   
 
 
@@ -264,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/24/Activity启动的概要流程/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/03/ViewStub/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zEcong Chai">
@@ -281,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Activity启动的概要流程</h1>
+          <h1 class="post-title" itemprop="name headline">避免ViewStub重复填充</h1>
         
 
         <div class="post-meta">
@@ -293,8 +291,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-24T22:10:01+08:00">
-                2017-04-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-03T21:16:32+08:00">
+                2017-10-03
               </time>
             
 
@@ -331,28 +329,15 @@
       
 
       
-        <p>#Activity启动的概要流程</p>
-<p>用户从Launcher程序点击应用图标可启动应用的入口Activity，Activity启动时需要多个进程之间的交互，Android系统中有一个zygote进程专用于孵化Android框架层和应用层程序的进程。还有一个system_server进程，该进程里运行了很多binder service，例如ActivityManagerService，PackageManagerService，WindowManagerService，这些binder service分别运行在不同的线程中，其中ActivityManagerService负责管理Activity栈，应用进程，task。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1932104-613089365b49d3d6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="activity_start_flow.png"></p>
-<blockquote>
-<p>主要分为5步：</p>
-<p>1.<strong>Launcher</strong>程序捕获到用户点击应用图标时，会通知<strong>ActivityManagerService</strong>(下文简称<strong>AMS</strong>)启动应用入口Activity。</p>
-<p>2.<strong>AMS</strong>检测到这个应用还未启动，则会通知<strong>Zygote</strong>进程孵化出应用进程。</p>
-<p>3.在这个<strong>dalvik应用进程</strong>中执行<strong>ActivityThread.main()</strong>。</p>
-<p>4.<strong>应用进程</strong>通知<strong>AMS</strong>，应用进程已经启动，AMS保存应用进程的<strong>代理对象</strong>，通过这个代理对象来控制应用进程。</p>
-<p>5.<strong>AMS</strong>通知应用进程创建入口Activity实例，并执行其生命周期方法。</p>
-</blockquote>
-<p>###浅谈ActivityManagerService<br>Activity的管理采用binder机制，管理Activity的接口是IActivityManager。</p>
-<p>AMS是在system_server进程中实现Activity的管理。</p>
-<p>ActivirtyManagerProxy对象是AMS在普通应用进程的一个代理对象，应用进程通过AMP代理对象调用AMS提供的功能。应用进程并不会直接创建AMP对象，而是通过ActivityManagerNative类的工具方法getDefault方法得到。</p>
-<p><strong>ActivityManagerService管理Activity时，主要涉及以下几个类:</strong></p>
-<p>1.ActivityManagerService，它是管理activity的入口类，聚合了ProcessRecord对象和ActivityStack对象</p>
-<p>2.ProcessRecord，表示应用进程记录，每个应用进程都有对应的ProcessRecord对象</p>
-<p>3.ActivityStack，该类主要管理回退栈</p>
-<p>4.ActivityRecord，每次启动一个Actvity会有一个对应的ActivityRecord对象，表示Activity的一个记录</p>
-<p>5.ActivityInfo，Activity的信息，比如启动模式，taskAffinity，flag信息(这些信息在AndroidManifest.xml里声明Activity时填写)</p>
-<p>6.TaskRecord，Task记录信息，一个Task可能有多个ActivityRecord，但是一个ActivityRecord只能属于一个TaskRecord</p>
-
+        <p>ViewStub 是一个不可见的，大小为0的View,最佳用途就是实现View的延迟加载，避免资源浪费，在需要的时候才加载View。在Android性能优化中广泛使用。<br>在使用viewstub的时候要注意一点，viewstub只能inflate一次，而且setVisibility也会间接的调用到inflate，重复inflate会抛出异常：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.IllegalStateException:ViewStub must have a non-null ViewGroup viewParent</span><br></pre></td></tr></table></figure></p>
+<p>解决方法为设置一个Boolean类型的变量，标记viewstub是否已经inflate，如果viewstub还未inflate则执行初始化操作，反之则不进行操作。其中要使用<strong>ViewStub中的OnInflateListener()</strong>监听事件来判断是否已经填充,从而保证<strong>viewstub</strong>不重复的<strong>inflate</strong>。</p>
+<p><strong>解决方法：</strong></p>
+<p>1.定义boolean变量和ViewStub</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">boolean isInflate = false;</span><br><span class="line">ViewStub mViewStub;</span><br></pre></td></tr></table></figure>
+<p>2.初始化ViewStub，并为ViewStub添加OnInflateListener()监听事件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mViewStub = (ViewStub)findViewById(R.id.viewstub_match_single);</span><br><span class="line"></span><br><span class="line">    mViewStub.setOnInflateListener(new OnInflateListener() &#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onInflate(ViewStub stub, View inflated) &#123;</span><br><span class="line"></span><br><span class="line">            isInflate = true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+<p>3.填充ViewStub</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private void initViewStub()&#123;//填充ViewStub的方法</span><br><span class="line">        if(!isInflate)&#123;//如果没有填充则执行inflate操作</span><br><span class="line">            View view = stubMatchSingle.inflate();</span><br><span class="line">            //初始化ViewStub的layout里面的控件</span><br><span class="line">            TextView mTv = (TextView) view.findViewById(R.id.txt_url);</span><br><span class="line">            mTv.setOnClickListener(this);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     
@@ -376,8 +361,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/23/跨进程间通信/" rel="next" title="跨进程通信">
-                <i class="fa fa-chevron-left"></i> 跨进程通信
+              <a href="/2017/04/24/Activity启动的概要流程/" rel="next" title="Activity启动的概要流程">
+                <i class="fa fa-chevron-left"></i> Activity启动的概要流程
               </a>
             
           </div>
@@ -386,8 +371,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/03/ViewStub/" rel="prev" title="避免ViewStub重复填充">
-                避免ViewStub重复填充 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/04/webView内存泄漏优化/" rel="prev" title="WebView内存泄漏优化">
+                WebView内存泄漏优化 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
