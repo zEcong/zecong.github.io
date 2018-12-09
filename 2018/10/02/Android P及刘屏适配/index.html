@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="#前言在分享适配刘海屏之前，先吐槽一波苹果。居然搞了个畸形屏幕，如果乔大爷还在，这种产品还能问世吗？ ###1.解决方案思路 通过上图我们不难看出，在刘海屏/圆角屏手机，为保证UI视图能完整展示，我们应通过计算，获取到可用区域的宽高（蓝色区域），并且尽量避免我们的view/window超出此区域，特别注意交互事件。这里有个点要注意：在Android P之后，状态栏区域如果要显示window，必须在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 刘海屏及9.0适配">
+<meta property="og:url" content="http://yoursite.com/2018/10/02/Android P及刘屏适配/index.html">
+<meta property="og:site_name" content="zEcong Chai&#39;s Blog">
+<meta property="og:description" content="#前言在分享适配刘海屏之前，先吐槽一波苹果。居然搞了个畸形屏幕，如果乔大爷还在，这种产品还能问世吗？ ###1.解决方案思路 通过上图我们不难看出，在刘海屏/圆角屏手机，为保证UI视图能完整展示，我们应通过计算，获取到可用区域的宽高（蓝色区域），并且尽量避免我们的view/window超出此区域，特别注意交互事件。这里有个点要注意：在Android P之后，状态栏区域如果要显示window，必须在">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-09T10:33:57.269Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 刘海屏及9.0适配">
+<meta name="twitter:description" content="#前言在分享适配刘海屏之前，先吐槽一波苹果。居然搞了个畸形屏幕，如果乔大爷还在，这种产品还能问世吗？ ###1.解决方案思路 通过上图我们不难看出，在刘海屏/圆角屏手机，为保证UI视图能完整展示，我们应通过计算，获取到可用区域的宽高（蓝色区域），并且尽量避免我们的view/window超出此区域，特别注意交互事件。这里有个点要注意：在Android P之后，状态栏区域如果要显示window，必须在">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/02/Android P及刘屏适配/"/>
+
+
+
+
+
+  <title>Android 刘海屏及9.0适配 | zEcong Chai's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zEcong Chai's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">失去的过往，就不再回头望</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/02/Android P及刘屏适配/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zEcong Chai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zEcong Chai's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android 刘海屏及9.0适配</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-02T11:21:00+08:00">
+                2018-10-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>#前言<br>在分享适配刘海屏之前，先吐槽一波苹果。居然搞了个畸形屏幕，如果乔大爷还在，这种产品还能问世吗？</p>
+<p>###1.解决方案思路</p>
+<p>通过上图我们不难看出，在刘海屏/圆角屏手机，为保证UI视图能完整展示，我们应通过计算，获取到可用区域的宽高（蓝色区域），并且尽量避免我们的view/window超出此区域，特别注意交互事件。这里有个点要注意：在Android P之后，状态栏区域如果要显示window，必须在Mainfest中添加权限。</p>
+<p>###2.Android P之前的刘海屏适配</p>
+<p>在P之前,国产厂商在Android P之前（基本都是Android O）就用上了高档大气上档次的刘海屏，所以，这也造就了各大厂商在Android P之前的解决方案百花齐放。下面，我们来看下主流厂商：华为、vivo、OPPO、小米等所提供的方案。</p>
+<p>各手机厂商官方文档:<br>OPPO:<a href="https://open.oppomobile.com/wiki/doc#id=10159" target="_blank" rel="noopener">https://open.oppomobile.com/wiki/doc#id=10159</a><br>VIVO:<a href="https://dev.vivo.com.cn/doc/document/info?id=103" target="_blank" rel="noopener">https://dev.vivo.com.cn/doc/document/info?id=103</a><br>HUAWEI:<a href="https://mini.eastday.com/bdmip/180411011257629.html" target="_blank" rel="noopener">https://mini.eastday.com/bdmip/180411011257629.html</a></p>
+<p>这里说挖孔屏是状态栏高度的两倍<br><a href="https://arstechnica.com/gadgets/2017/09/essential-phone-review-impressive-for-a-new-company-but-not-competitive/" target="_blank" rel="noopener">https://arstechnica.com/gadgets/2017/09/essential-phone-review-impressive-for-a-new-company-but-not-competitive/</a><br>然而不同厂商的挖孔高度明显参差不齐，所以使用获取状态栏高度来决定刘海高度这种方案是不可行的。</p>
+<p>####2.1 华为</p>
+<p>#####2.1.1 使用刘海区显示</p>
+<p>使用新增的meta-data属性android.notch_support。在应用的AndroidManifest.xml中增加meta-data属性，此属性不仅可以针对Application生效，也可以对Activity配置生效。如下所示：</p>
+<p><meta-data android:name="android.notch_support" android:value="true"><br>复制代码</meta-data></p>
+<p>•    对Application生效，意味着该应用的所有页面，系统都不会做竖屏场景的特殊下移或者是横屏场景的右移特殊处理。<br>•    对Activity生效，意味着可以针对单个页面进行刘海屏适配，设置了该属性的Activity系统将不会做特殊处理。</p>
+<p>#####2.1.2 是否有刘海屏</p>
+<p>通过以下代码即可知道华为手机上是否有刘海屏了，true为有刘海，false则没有。</p>
+<pre><code>public static boolean hasNotchAtHuawei(Context context) {
+    boolean ret = false;
+    try {
+        ClassLoader classLoader = context.getClassLoader();
+        Class HwNotchSizeUtil = classLoader.loadClass(&quot;com.huawei.android.util.HwNotchSizeUtil&quot;);
+        Method get = HwNotchSizeUtil.getMethod(&quot;hasNotchInScreen&quot;);
+        ret = (boolean) get.invoke(HwNotchSizeUtil);
+    } catch (ClassNotFoundException e) {
+        Log.e(&quot;Notch&quot;, &quot;hasNotchAtHuawei ClassNotFoundException&quot;);
+    } catch (NoSuchMethodException e) {
+        Log.e(&quot;Notch&quot;, &quot;hasNotchAtHuawei NoSuchMethodException&quot;);
+    } catch (Exception e) {
+        Log.e(&quot;Notch&quot;, &quot;hasNotchAtHuawei Exception&quot;);
+    } finally {
+        return ret;
+    }
+}
+</code></pre><p>####2.1.3 刘海尺寸</p>
+<p>华为提供了接口获取刘海的尺寸，如下：</p>
+<pre><code>//获取刘海尺寸：width、height
+//int[0]值为刘海宽度 int[1]值为刘海高度
+public static int[] getNotchSizeAtHuawei(Context context) {
+    int[] ret = new int[]{0, 0};
+    try {
+        ClassLoader cl = context.getClassLoader();
+        Class HwNotchSizeUtil = cl.loadClass(&quot;com.huawei.android.util.HwNotchSizeUtil&quot;);
+        Method get = HwNotchSizeUtil.getMethod(&quot;getNotchSize&quot;);
+        ret = (int[]) get.invoke(HwNotchSizeUtil);
+    } catch (ClassNotFoundException e) {
+        Log.e(&quot;Notch&quot;, &quot;getNotchSizeAtHuawei ClassNotFoundException&quot;);
+    } catch (NoSuchMethodException e) {
+        Log.e(&quot;Notch&quot;, &quot;getNotchSizeAtHuawei NoSuchMethodException&quot;);
+    } catch (Exception e) {
+        Log.e(&quot;Notch&quot;, &quot;getNotchSizeAtHuawei Exception&quot;);
+    } finally {
+        return ret;
+    }
+}
+</code></pre><p>####2.2 vivo</p>
+<p>vivo在设置–显示与亮度–第三方应用显示比例中可以切换是否全屏显示还是安全区域显示。</p>
+<p>#####2.2.1 是否有刘海屏</p>
+<pre><code>public static final int VIVO_NOTCH = 0x00000020;//是否有刘海
+public static final int VIVO_FILLET = 0x00000008;//是否有圆角
+
+public static boolean hasNotchAtVoio(Context context) {
+    boolean ret = false;
+    try {
+        ClassLoader classLoader = context.getClassLoader();
+        Class FtFeature = classLoader.loadClass(&quot;android.util.FtFeature&quot;);
+        Method method = FtFeature.getMethod(&quot;isFeatureSupport&quot;, int.class);
+        ret = (boolean) method.invoke(FtFeature, VIVO_NOTCH);
+    } catch (ClassNotFoundException e) {
+        Log.e(&quot;Notch&quot;, &quot;hasNotchAtVoio ClassNotFoundException&quot;);
+    } catch (NoSuchMethodException e) {
+        Log.e(&quot;Notch&quot;, &quot;hasNotchAtVoio NoSuchMethodException&quot;);
+    } catch (Exception e) {
+        Log.e(&quot;Notch&quot;, &quot;hasNotchAtVoio Exception&quot;);
+    } finally {
+        return ret;
+    }
+}
+</code></pre><p>#####2.2.2 刘海尺寸<br>vivo不提供接口获取刘海尺寸，目前vivo的刘海宽为100dp,高为27dp。</p>
+<p>####2.3 OPPO</p>
+<p>OPPO目前在设置 – 显示 – 应用全屏显示 – 凹形区域显示控制，里面有关闭凹形区域开关。</p>
+<p>#####2.3.1 是否有刘海屏</p>
+<pre><code>public static boolean hasNotchInScreenAtOPPO(Context context) {
+    return context.getPackageManager().hasSystemFeature(&quot;com.oppo.feature.screen.heteromorphism&quot;);
+}
+</code></pre><p>#####2.3.2 刘海尺寸</p>
+<p>OPPO不提供接口获取刘海尺寸，目前其有刘海屏的机型尺寸规格都是统一的。不排除以后机型会有变化。其显示屏宽度为1080px，高度为2280px。刘海区域则都是宽度为324px,  高度为80px。<br>3.4 小米</p>
+<p>#####2.4.1 是否有刘海屏</p>
+<p>系统增加了 property ro.miui.notch，值为1时则是 Notch 屏手机。</p>
+<p>手头上没有小米8的手机，暂时没法验证，这里就不贴代码了，免得误导大家。后面测试过再放出来。</p>
+<p>#####2.4.2 刘海尺寸</p>
+<p>小米的状态栏高度会略高于刘海屏的高度，因此可以通过获取状态栏的高度来间接避开刘海屏，获取状态栏的高度代码如下：</p>
+<pre><code>public static int getStatusBarHeight(Context context) {
+    int statusBarHeight = 0;
+    int resourceId = context.getResources().getIdentifier(&quot;status_bar_height&quot;, &quot;dimen&quot;, &quot;android&quot;);
+    if (resourceId &gt; 0) {
+        statusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
+    }
+    return statusBarHeight;
+}
+</code></pre><p>其他手机也可以通过这个方法来间接避开刘海屏，但是有可能有些手机的刘海屏高度会高于状态栏的高度，所以这个方法获取到的结果并不一定安全。</p>
+<p>###3.Android P中的刘海屏适配</p>
+<p>####3.1 Google对刘海屏的支持介绍</p>
+<p>Android P 支持最新的全面屏以及为摄像头和扬声器预留空间的凹口屏幕。 通过全新的 DisplayCutout 类，可以确定非功能区域的位置和形状，这些区域不应显示内容。 要确定这些凹口屏幕区域是否存在及其位置，请使用 getDisplayCutout() 函数。</p>
+<p>####3.2 设置凹口屏幕显示模式<br>全新的窗口布局属性 layoutInDisplayCutoutMode 让您的应用可以为设备凹口屏幕周围的内容进行布局。 您可以将此属性设为下列值之一：</p>
+<p>•    LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT<br>•    LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS<br>•    LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER<br>模式    模式说明<br>LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT    只有当DisplayCutout完全包含在系统栏中时，才允许窗口延伸到DisplayCutout区域。 否则，窗口布局不与DisplayCutout区域重叠。<br>LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER    该窗口决不允许与DisplayCutout区域重叠。<br>LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES    该窗口始终允许延伸到屏幕短边上的DisplayCutout区域。</p>
+<p>例子：<br>var lp = window.attributes<br> lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS<br> window.attributes = lp</p>
+<p>####3.3 Android P中凹口屏幕相关接口</p>
+<p>注意，以下接口都是要Build.VERSION.SDK_INT &gt;= 28才能调用到。</p>
+<p>DisplayCutout类接口<br>主要用于获取凹口位置和安全区域的位置等。主要接口如下所示：<br>方法    接口说明<br>getBoundingRects()    返回Rects的列表，每个Rects都是显示屏上非功能区域的边界矩形。<br>getSafeInsetLeft ()    返回安全区域距离屏幕左边的距离，单位是px。<br>getSafeInsetRight ()    返回安全区域距离屏幕右边的距离，单位是px。<br>getSafeInsetTop ()    返回安全区域距离屏幕顶部的距离，单位是px。<br>getSafeInsetBottom()    返回安全区域距离屏幕底部的距离，单位是px。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/15/Flutter简介/" rel="next" title="Flutter学习笔记（一）">
+                <i class="fa fa-chevron-left"></i> Flutter学习笔记（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zEcong Chai" />
+          <p class="site-author-name" itemprop="name">zEcong Chai</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zEcong Chai</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
