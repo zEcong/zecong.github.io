@@ -101,7 +101,7 @@
 <meta property="og:site_name" content="zEcong Chai&#39;s Blog">
 <meta property="og:description" content="前言在分享适配刘海屏之前，先吐槽一波苹果。居然搞了个畸形屏幕，如果乔大爷还在，这种产品还能问世吗？ 1.解决方案思路通过上图我们不难看出，在刘海屏/圆角屏手机，为保证UI视图能完整展示，我们应通过计算，获取到可用区域的宽高（蓝色区域），并且尽量避免我们的view/window超出此区域，特别注意交互事件。这里有个点要注意：在Android P之后，状态栏区域如果要显示window，必须在Mainf">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-09T10:38:02.361Z">
+<meta property="og:updated_time" content="2018-12-09T10:43:33.828Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android 刘海屏及9.0适配">
 <meta name="twitter:description" content="前言在分享适配刘海屏之前，先吐槽一波苹果。居然搞了个畸形屏幕，如果乔大爷还在，这种产品还能问世吗？ 1.解决方案思路通过上图我们不难看出，在刘海屏/圆角屏手机，为保证UI视图能完整展示，我们应通过计算，获取到可用区域的宽高（蓝色区域），并且尽量避免我们的view/window超出此区域，特别注意交互事件。这里有个点要注意：在Android P之后，状态栏区域如果要显示window，必须在Mainf">
@@ -330,14 +330,14 @@
 
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在分享适配刘海屏之前，先吐槽一波苹果。居然搞了个畸形屏幕，如果乔大爷还在，这种产品还能问世吗？</p>
-<h3 id="1-解决方案思路"><a href="#1-解决方案思路" class="headerlink" title="1.解决方案思路"></a>1.解决方案思路</h3><p>通过上图我们不难看出，在刘海屏/圆角屏手机，为保证UI视图能完整展示，我们应通过计算，获取到可用区域的宽高（蓝色区域），并且尽量避免我们的view/window超出此区域，特别注意交互事件。这里有个点要注意：在Android P之后，状态栏区域如果要显示window，必须在Mainfest中添加权限。</p>
-<h3 id="2-Android-P之前的刘海屏适配"><a href="#2-Android-P之前的刘海屏适配" class="headerlink" title="2.Android P之前的刘海屏适配"></a>2.Android P之前的刘海屏适配</h3><p>在P之前,国产厂商在Android P之前（基本都是Android O）就用上了高档大气上档次的刘海屏，所以，这也造就了各大厂商在Android P之前的解决方案百花齐放。下面，我们来看下主流厂商：华为、vivo、OPPO、小米等所提供的方案。</p>
+<h1 id="1-解决方案思路"><a href="#1-解决方案思路" class="headerlink" title="1.解决方案思路"></a>1.解决方案思路</h1><p>通过上图我们不难看出，在刘海屏/圆角屏手机，为保证UI视图能完整展示，我们应通过计算，获取到可用区域的宽高（蓝色区域），并且尽量避免我们的view/window超出此区域，特别注意交互事件。这里有个点要注意：在Android P之后，状态栏区域如果要显示window，必须在Mainfest中添加权限。</p>
+<h1 id="2-Android-P之前的刘海屏适配"><a href="#2-Android-P之前的刘海屏适配" class="headerlink" title="2.Android P之前的刘海屏适配"></a>2.Android P之前的刘海屏适配</h1><p>在P之前,国产厂商在Android P之前（基本都是Android O）就用上了高档大气上档次的刘海屏，所以，这也造就了各大厂商在Android P之前的解决方案百花齐放。下面，我们来看下主流厂商：华为、vivo、OPPO、小米等所提供的方案。</p>
 <p>各手机厂商官方文档:<br>OPPO:<a href="https://open.oppomobile.com/wiki/doc#id=10159" target="_blank" rel="noopener">https://open.oppomobile.com/wiki/doc#id=10159</a><br>VIVO:<a href="https://dev.vivo.com.cn/doc/document/info?id=103" target="_blank" rel="noopener">https://dev.vivo.com.cn/doc/document/info?id=103</a><br>HUAWEI:<a href="https://mini.eastday.com/bdmip/180411011257629.html" target="_blank" rel="noopener">https://mini.eastday.com/bdmip/180411011257629.html</a></p>
 <p>这里说挖孔屏是状态栏高度的两倍<br><a href="https://arstechnica.com/gadgets/2017/09/essential-phone-review-impressive-for-a-new-company-but-not-competitive/" target="_blank" rel="noopener">https://arstechnica.com/gadgets/2017/09/essential-phone-review-impressive-for-a-new-company-but-not-competitive/</a><br>然而不同厂商的挖孔高度明显参差不齐，所以使用获取状态栏高度来决定刘海高度这种方案是不可行的。</p>
-<h4 id="2-1-华为"><a href="#2-1-华为" class="headerlink" title="2.1 华为"></a>2.1 华为</h4><h5 id="2-1-1-使用刘海区显示"><a href="#2-1-1-使用刘海区显示" class="headerlink" title="2.1.1 使用刘海区显示"></a>2.1.1 使用刘海区显示</h5><p>使用新增的meta-data属性android.notch_support。在应用的AndroidManifest.xml中增加meta-data属性，此属性不仅可以针对Application生效，也可以对Activity配置生效。如下所示：</p>
+<h2 id="2-1-华为"><a href="#2-1-华为" class="headerlink" title="2.1 华为"></a>2.1 华为</h2><h3 id="2-1-1-使用刘海区显示"><a href="#2-1-1-使用刘海区显示" class="headerlink" title="2.1.1 使用刘海区显示"></a>2.1.1 使用刘海区显示</h3><p>使用新增的meta-data属性android.notch_support。在应用的AndroidManifest.xml中增加meta-data属性，此属性不仅可以针对Application生效，也可以对Activity配置生效。如下所示：</p>
 <p><meta-data android:name="android.notch_support" android:value="true"><br>复制代码</meta-data></p>
 <p>•    对Application生效，意味着该应用的所有页面，系统都不会做竖屏场景的特殊下移或者是横屏场景的右移特殊处理。<br>•    对Activity生效，意味着可以针对单个页面进行刘海屏适配，设置了该属性的Activity系统将不会做特殊处理。</p>
-<h5 id="2-1-2-是否有刘海屏"><a href="#2-1-2-是否有刘海屏" class="headerlink" title="2.1.2 是否有刘海屏"></a>2.1.2 是否有刘海屏</h5><p>通过以下代码即可知道华为手机上是否有刘海屏了，true为有刘海，false则没有。</p>
+<h3 id="2-1-2-是否有刘海屏"><a href="#2-1-2-是否有刘海屏" class="headerlink" title="2.1.2 是否有刘海屏"></a>2.1.2 是否有刘海屏</h3><p>通过以下代码即可知道华为手机上是否有刘海屏了，true为有刘海，false则没有。</p>
 <pre><code>public static boolean hasNotchAtHuawei(Context context) {
     boolean ret = false;
     try {
@@ -355,7 +355,7 @@
         return ret;
     }
 }
-</code></pre><h4 id="2-1-3-刘海尺寸"><a href="#2-1-3-刘海尺寸" class="headerlink" title="2.1.3 刘海尺寸"></a>2.1.3 刘海尺寸</h4><p>华为提供了接口获取刘海的尺寸，如下：</p>
+</code></pre><h3 id="2-1-3-刘海尺寸"><a href="#2-1-3-刘海尺寸" class="headerlink" title="2.1.3 刘海尺寸"></a>2.1.3 刘海尺寸</h3><p>华为提供了接口获取刘海的尺寸，如下：</p>
 <pre><code>//获取刘海尺寸：width、height
 //int[0]值为刘海宽度 int[1]值为刘海高度
 public static int[] getNotchSizeAtHuawei(Context context) {
@@ -375,8 +375,8 @@ public static int[] getNotchSizeAtHuawei(Context context) {
         return ret;
     }
 }
-</code></pre><h4 id="2-2-vivo"><a href="#2-2-vivo" class="headerlink" title="2.2 vivo"></a>2.2 vivo</h4><p>vivo在设置–显示与亮度–第三方应用显示比例中可以切换是否全屏显示还是安全区域显示。</p>
-<h5 id="2-2-1-是否有刘海屏"><a href="#2-2-1-是否有刘海屏" class="headerlink" title="2.2.1 是否有刘海屏"></a>2.2.1 是否有刘海屏</h5><pre><code>public static final int VIVO_NOTCH = 0x00000020;//是否有刘海
+</code></pre><h2 id="2-2-vivo"><a href="#2-2-vivo" class="headerlink" title="2.2 vivo"></a>2.2 vivo</h2><p>vivo在设置–显示与亮度–第三方应用显示比例中可以切换是否全屏显示还是安全区域显示。</p>
+<h3 id="2-2-1-是否有刘海屏"><a href="#2-2-1-是否有刘海屏" class="headerlink" title="2.2.1 是否有刘海屏"></a>2.2.1 是否有刘海屏</h3><pre><code>public static final int VIVO_NOTCH = 0x00000020;//是否有刘海
 public static final int VIVO_FILLET = 0x00000008;//是否有圆角
 
 public static boolean hasNotchAtVoio(Context context) {
@@ -396,15 +396,15 @@ public static boolean hasNotchAtVoio(Context context) {
         return ret;
     }
 }
-</code></pre><h5 id="2-2-2-刘海尺寸"><a href="#2-2-2-刘海尺寸" class="headerlink" title="2.2.2 刘海尺寸"></a>2.2.2 刘海尺寸</h5><p>vivo不提供接口获取刘海尺寸，目前vivo的刘海宽为100dp,高为27dp。</p>
-<h4 id="2-3-OPPO"><a href="#2-3-OPPO" class="headerlink" title="2.3 OPPO"></a>2.3 OPPO</h4><p>OPPO目前在设置 – 显示 – 应用全屏显示 – 凹形区域显示控制，里面有关闭凹形区域开关。</p>
-<h5 id="2-3-1-是否有刘海屏"><a href="#2-3-1-是否有刘海屏" class="headerlink" title="2.3.1 是否有刘海屏"></a>2.3.1 是否有刘海屏</h5><pre><code>public static boolean hasNotchInScreenAtOPPO(Context context) {
+</code></pre><h3 id="2-2-2-刘海尺寸"><a href="#2-2-2-刘海尺寸" class="headerlink" title="2.2.2 刘海尺寸"></a>2.2.2 刘海尺寸</h3><p>vivo不提供接口获取刘海尺寸，目前vivo的刘海宽为100dp,高为27dp。</p>
+<h2 id="2-3-OPPO"><a href="#2-3-OPPO" class="headerlink" title="2.3 OPPO"></a>2.3 OPPO</h2><p>OPPO目前在设置 – 显示 – 应用全屏显示 – 凹形区域显示控制，里面有关闭凹形区域开关。</p>
+<h3 id="2-3-1-是否有刘海屏"><a href="#2-3-1-是否有刘海屏" class="headerlink" title="2.3.1 是否有刘海屏"></a>2.3.1 是否有刘海屏</h3><pre><code>public static boolean hasNotchInScreenAtOPPO(Context context) {
     return context.getPackageManager().hasSystemFeature(&quot;com.oppo.feature.screen.heteromorphism&quot;);
 }
-</code></pre><h5 id="2-3-2-刘海尺寸"><a href="#2-3-2-刘海尺寸" class="headerlink" title="2.3.2 刘海尺寸"></a>2.3.2 刘海尺寸</h5><p>OPPO不提供接口获取刘海尺寸，目前其有刘海屏的机型尺寸规格都是统一的。不排除以后机型会有变化。其显示屏宽度为1080px，高度为2280px。刘海区域则都是宽度为324px,  高度为80px。<br>3.4 小米</p>
-<h5 id="2-4-1-是否有刘海屏"><a href="#2-4-1-是否有刘海屏" class="headerlink" title="2.4.1 是否有刘海屏"></a>2.4.1 是否有刘海屏</h5><p>系统增加了 property ro.miui.notch，值为1时则是 Notch 屏手机。</p>
+</code></pre><h3 id="2-3-2-刘海尺寸"><a href="#2-3-2-刘海尺寸" class="headerlink" title="2.3.2 刘海尺寸"></a>2.3.2 刘海尺寸</h3><p>OPPO不提供接口获取刘海尺寸，目前其有刘海屏的机型尺寸规格都是统一的。不排除以后机型会有变化。其显示屏宽度为1080px，高度为2280px。刘海区域则都是宽度为324px,  高度为80px。</p>
+<h2 id="2-4-小米"><a href="#2-4-小米" class="headerlink" title="2.4 小米"></a>2.4 小米</h2><h3 id="2-4-1-是否有刘海屏"><a href="#2-4-1-是否有刘海屏" class="headerlink" title="2.4.1 是否有刘海屏"></a>2.4.1 是否有刘海屏</h3><p>系统增加了 property ro.miui.notch，值为1时则是 Notch 屏手机。</p>
 <p>手头上没有小米8的手机，暂时没法验证，这里就不贴代码了，免得误导大家。后面测试过再放出来。</p>
-<h5 id="2-4-2-刘海尺寸"><a href="#2-4-2-刘海尺寸" class="headerlink" title="2.4.2 刘海尺寸"></a>2.4.2 刘海尺寸</h5><p>小米的状态栏高度会略高于刘海屏的高度，因此可以通过获取状态栏的高度来间接避开刘海屏，获取状态栏的高度代码如下：</p>
+<h3 id="2-4-2-刘海尺寸"><a href="#2-4-2-刘海尺寸" class="headerlink" title="2.4.2 刘海尺寸"></a>2.4.2 刘海尺寸</h3><p>小米的状态栏高度会略高于刘海屏的高度，因此可以通过获取状态栏的高度来间接避开刘海屏，获取状态栏的高度代码如下：</p>
 <pre><code>public static int getStatusBarHeight(Context context) {
     int statusBarHeight = 0;
     int resourceId = context.getResources().getIdentifier(&quot;status_bar_height&quot;, &quot;dimen&quot;, &quot;android&quot;);
@@ -414,11 +414,11 @@ public static boolean hasNotchAtVoio(Context context) {
     return statusBarHeight;
 }
 </code></pre><p>其他手机也可以通过这个方法来间接避开刘海屏，但是有可能有些手机的刘海屏高度会高于状态栏的高度，所以这个方法获取到的结果并不一定安全。</p>
-<h3 id="3-Android-P中的刘海屏适配"><a href="#3-Android-P中的刘海屏适配" class="headerlink" title="3.Android P中的刘海屏适配"></a>3.Android P中的刘海屏适配</h3><h4 id="3-1-Google对刘海屏的支持介绍"><a href="#3-1-Google对刘海屏的支持介绍" class="headerlink" title="3.1 Google对刘海屏的支持介绍"></a>3.1 Google对刘海屏的支持介绍</h4><p>Android P 支持最新的全面屏以及为摄像头和扬声器预留空间的凹口屏幕。 通过全新的 DisplayCutout 类，可以确定非功能区域的位置和形状，这些区域不应显示内容。 要确定这些凹口屏幕区域是否存在及其位置，请使用 getDisplayCutout() 函数。</p>
-<h4 id="3-2-设置凹口屏幕显示模式"><a href="#3-2-设置凹口屏幕显示模式" class="headerlink" title="3.2 设置凹口屏幕显示模式"></a>3.2 设置凹口屏幕显示模式</h4><p>全新的窗口布局属性 layoutInDisplayCutoutMode 让您的应用可以为设备凹口屏幕周围的内容进行布局。 您可以将此属性设为下列值之一：</p>
+<h1 id="3-Android-P中的刘海屏适配"><a href="#3-Android-P中的刘海屏适配" class="headerlink" title="3.Android P中的刘海屏适配"></a>3.Android P中的刘海屏适配</h1><h2 id="3-1-Google对刘海屏的支持介绍"><a href="#3-1-Google对刘海屏的支持介绍" class="headerlink" title="3.1 Google对刘海屏的支持介绍"></a>3.1 Google对刘海屏的支持介绍</h2><p>Android P 支持最新的全面屏以及为摄像头和扬声器预留空间的凹口屏幕。 通过全新的 DisplayCutout 类，可以确定非功能区域的位置和形状，这些区域不应显示内容。 要确定这些凹口屏幕区域是否存在及其位置，请使用 getDisplayCutout() 函数。</p>
+<h2 id="3-2-设置凹口屏幕显示模式"><a href="#3-2-设置凹口屏幕显示模式" class="headerlink" title="3.2 设置凹口屏幕显示模式"></a>3.2 设置凹口屏幕显示模式</h2><p>全新的窗口布局属性 layoutInDisplayCutoutMode 让您的应用可以为设备凹口屏幕周围的内容进行布局。 您可以将此属性设为下列值之一：</p>
 <p>•    LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT<br>•    LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS<br>•    LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER<br>模式    模式说明<br>LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT    只有当DisplayCutout完全包含在系统栏中时，才允许窗口延伸到DisplayCutout区域。 否则，窗口布局不与DisplayCutout区域重叠。<br>LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER    该窗口决不允许与DisplayCutout区域重叠。<br>LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES    该窗口始终允许延伸到屏幕短边上的DisplayCutout区域。</p>
 <p>例子：<br>var lp = window.attributes<br> lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS<br> window.attributes = lp</p>
-<h4 id="3-3-Android-P中凹口屏幕相关接口"><a href="#3-3-Android-P中凹口屏幕相关接口" class="headerlink" title="3.3 Android P中凹口屏幕相关接口"></a>3.3 Android P中凹口屏幕相关接口</h4><p>注意，以下接口都是要Build.VERSION.SDK_INT &gt;= 28才能调用到。</p>
+<h2 id="3-3-Android-P中凹口屏幕相关接口"><a href="#3-3-Android-P中凹口屏幕相关接口" class="headerlink" title="3.3 Android P中凹口屏幕相关接口"></a>3.3 Android P中凹口屏幕相关接口</h2><p>注意，以下接口都是要Build.VERSION.SDK_INT &gt;= 28才能调用到。</p>
 <p>DisplayCutout类接口<br>主要用于获取凹口位置和安全区域的位置等。主要接口如下所示：<br>方法    接口说明<br>getBoundingRects()    返回Rects的列表，每个Rects都是显示屏上非功能区域的边界矩形。<br>getSafeInsetLeft ()    返回安全区域距离屏幕左边的距离，单位是px。<br>getSafeInsetRight ()    返回安全区域距离屏幕右边的距离，单位是px。<br>getSafeInsetTop ()    返回安全区域距离屏幕顶部的距离，单位是px。<br>getSafeInsetBottom()    返回安全区域距离屏幕底部的距离，单位是px。</p>
 
       
@@ -568,7 +568,7 @@ public static boolean hasNotchAtVoio(Context context) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-解决方案思路"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.解决方案思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Android-P之前的刘海屏适配"><span class="nav-number">1.0.2.</span> <span class="nav-text">2.Android P之前的刘海屏适配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-华为"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">2.1 华为</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-1-使用刘海区显示"><span class="nav-number">1.0.2.1.1.</span> <span class="nav-text">2.1.1 使用刘海区显示</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-2-是否有刘海屏"><span class="nav-number">1.0.2.1.2.</span> <span class="nav-text">2.1.2 是否有刘海屏</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-3-刘海尺寸"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">2.1.3 刘海尺寸</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-vivo"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">2.2 vivo</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-1-是否有刘海屏"><span class="nav-number">1.0.2.3.1.</span> <span class="nav-text">2.2.1 是否有刘海屏</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-2-刘海尺寸"><span class="nav-number">1.0.2.3.2.</span> <span class="nav-text">2.2.2 刘海尺寸</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-OPPO"><span class="nav-number">1.0.2.4.</span> <span class="nav-text">2.3 OPPO</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-1-是否有刘海屏"><span class="nav-number">1.0.2.4.1.</span> <span class="nav-text">2.3.1 是否有刘海屏</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-2-刘海尺寸"><span class="nav-number">1.0.2.4.2.</span> <span class="nav-text">2.3.2 刘海尺寸</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-4-1-是否有刘海屏"><span class="nav-number">1.0.2.4.3.</span> <span class="nav-text">2.4.1 是否有刘海屏</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-4-2-刘海尺寸"><span class="nav-number">1.0.2.4.4.</span> <span class="nav-text">2.4.2 刘海尺寸</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Android-P中的刘海屏适配"><span class="nav-number">1.0.3.</span> <span class="nav-text">3.Android P中的刘海屏适配</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-Google对刘海屏的支持介绍"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">3.1 Google对刘海屏的支持介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-设置凹口屏幕显示模式"><span class="nav-number">1.0.3.2.</span> <span class="nav-text">3.2 设置凹口屏幕显示模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-Android-P中凹口屏幕相关接口"><span class="nav-number">1.0.3.3.</span> <span class="nav-text">3.3 Android P中凹口屏幕相关接口</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-解决方案思路"><span class="nav-number">2.</span> <span class="nav-text">1.解决方案思路</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Android-P之前的刘海屏适配"><span class="nav-number">3.</span> <span class="nav-text">2.Android P之前的刘海屏适配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-华为"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 华为</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-使用刘海区显示"><span class="nav-number">3.1.1.</span> <span class="nav-text">2.1.1 使用刘海区显示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-是否有刘海屏"><span class="nav-number">3.1.2.</span> <span class="nav-text">2.1.2 是否有刘海屏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-刘海尺寸"><span class="nav-number">3.1.3.</span> <span class="nav-text">2.1.3 刘海尺寸</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-vivo"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 vivo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-是否有刘海屏"><span class="nav-number">3.2.1.</span> <span class="nav-text">2.2.1 是否有刘海屏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-刘海尺寸"><span class="nav-number">3.2.2.</span> <span class="nav-text">2.2.2 刘海尺寸</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-OPPO"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 OPPO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-是否有刘海屏"><span class="nav-number">3.3.1.</span> <span class="nav-text">2.3.1 是否有刘海屏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-刘海尺寸"><span class="nav-number">3.3.2.</span> <span class="nav-text">2.3.2 刘海尺寸</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-小米"><span class="nav-number">3.4.</span> <span class="nav-text">2.4 小米</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-1-是否有刘海屏"><span class="nav-number">3.4.1.</span> <span class="nav-text">2.4.1 是否有刘海屏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-2-刘海尺寸"><span class="nav-number">3.4.2.</span> <span class="nav-text">2.4.2 刘海尺寸</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Android-P中的刘海屏适配"><span class="nav-number">4.</span> <span class="nav-text">3.Android P中的刘海屏适配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Google对刘海屏的支持介绍"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 Google对刘海屏的支持介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-设置凹口屏幕显示模式"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 设置凹口屏幕显示模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Android-P中凹口屏幕相关接口"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 Android P中凹口屏幕相关接口</span></a></li></ol></li></ol></div>
             
 
           </div>
