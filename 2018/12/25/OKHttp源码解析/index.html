@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="OKHttp源码解析整体结构图 整体的流程图 五大拦截器RetryAndFollowUpInterceptor拦截器RetryAndFollowupInterceptor是重试重定向拦截器，它的主要作用是负责失败重连。OkHttp中的重定向功能是默认开启的。 总结RetryAndFollowupInterceptor拦截器：  创建StreamAllocation对象。 调用RealInterce">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OKHttp源码解析">
+<meta property="og:url" content="http://yoursite.com/2018/12/25/OKHttp源码解析/index.html">
+<meta property="og:site_name" content="zEcong Chai&#39;s Blog">
+<meta property="og:description" content="OKHttp源码解析整体结构图 整体的流程图 五大拦截器RetryAndFollowUpInterceptor拦截器RetryAndFollowupInterceptor是重试重定向拦截器，它的主要作用是负责失败重连。OkHttp中的重定向功能是默认开启的。 总结RetryAndFollowupInterceptor拦截器：  创建StreamAllocation对象。 调用RealInterce">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5713484-a89f541f0f7797a6.png?imageMogr2/auto-orient/">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5713484-35a9989e893171f1.png?imageMogr2/auto-orient/">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5713484-7404e49cbd97138f.png?imageMogr2/auto-orient/">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5713484-7039ead52b1ae609.png?imageMogr2/auto-orient/">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5713484-e2af4e60b71bf432.png?imageMogr2/auto-orient/">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5713484-42bef72907339ff5.png?imageMogr2/auto-orient/">
+<meta property="og:updated_time" content="2018-12-25T03:26:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OKHttp源码解析">
+<meta name="twitter:description" content="OKHttp源码解析整体结构图 整体的流程图 五大拦截器RetryAndFollowUpInterceptor拦截器RetryAndFollowupInterceptor是重试重定向拦截器，它的主要作用是负责失败重连。OkHttp中的重定向功能是默认开启的。 总结RetryAndFollowupInterceptor拦截器：  创建StreamAllocation对象。 调用RealInterce">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5713484-a89f541f0f7797a6.png?imageMogr2/auto-orient/">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/25/OKHttp源码解析/"/>
+
+
+
+
+
+  <title>OKHttp源码解析 | zEcong Chai's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zEcong Chai's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">失去的过往，就不再回头望</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/25/OKHttp源码解析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zEcong Chai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zEcong Chai's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OKHttp源码解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-25T00:00:00+08:00">
+                2018-12-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="OKHttp源码解析"><a href="#OKHttp源码解析" class="headerlink" title="OKHttp源码解析"></a>OKHttp源码解析</h1><h2 id="整体结构图"><a href="#整体结构图" class="headerlink" title="整体结构图"></a>整体结构图</h2><p><img src="https://upload-images.jianshu.io/upload_images/5713484-a89f541f0f7797a6.png?imageMogr2/auto-orient/" alt="整体结构图"></p>
+<h2 id="整体的流程图"><a href="#整体的流程图" class="headerlink" title="整体的流程图"></a>整体的流程图</h2><p><img src="https://upload-images.jianshu.io/upload_images/5713484-35a9989e893171f1.png?imageMogr2/auto-orient/" alt="流程图"></p>
+<h2 id="五大拦截器"><a href="#五大拦截器" class="headerlink" title="五大拦截器"></a>五大拦截器</h2><h3 id="RetryAndFollowUpInterceptor拦截器"><a href="#RetryAndFollowUpInterceptor拦截器" class="headerlink" title="RetryAndFollowUpInterceptor拦截器"></a>RetryAndFollowUpInterceptor拦截器</h3><p>RetryAndFollowupInterceptor是重试重定向拦截器，它的主要作用是负责失败重连。OkHttp中的重定向功能是默认开启的。</p>
+<p>总结RetryAndFollowupInterceptor拦截器：</p>
+<ul>
+<li>创建StreamAllocation对象。</li>
+<li>调用RealInterceptorChain.proceed()进行网络请求。</li>
+<li>根据异常结果或响应结果判断是否进行重新请求。</li>
+<li>调用下一个拦截器，对Response进行处理，返回给上一个拦截器。</li>
+</ul>
+<h3 id="BridgeInterceptor拦截器"><a href="#BridgeInterceptor拦截器" class="headerlink" title="BridgeInterceptor拦截器"></a>BridgeInterceptor拦截器</h3><p>BridgeInterceptor是桥接和适配拦截器，它的作用是设置内容长度、编码方式以及压缩等等一系列操作，主要是添加头部的作用。</p>
+<p>总结BridgeInterceptor拦截器：</p>
+<ul>
+<li>负责将用户构建的一个Request请求转化为能够进行网络访问的请求，通过给头部添加信息。</li>
+<li>将这个符合网络请求的Request进行网络请求。</li>
+<li>将网络请求回来的响应Response转化为用户可用的Response。</li>
+</ul>
+<h3 id="CacheInterceptor拦截器"><a href="#CacheInterceptor拦截器" class="headerlink" title="CacheInterceptor拦截器"></a>CacheInterceptor拦截器</h3><p><a href="https://www.jianshu.com/p/37b3badd7033" target="_blank" rel="noopener">CacheInterceptor</a></p>
+<h4 id="一-原理和注意事项："><a href="#一-原理和注意事项：" class="headerlink" title="(一)原理和注意事项："></a>(一)原理和注意事项：</h4><p>1、原理</p>
+<ul>
+<li>okhttp的网络缓存是基于http协议.</li>
+<li>使用DiskLruCache的缓存策略.</li>
+</ul>
+<p>2、注意事项：<br>1、目前只支持GET，其他请求方式需要自己实现。<br>2、需要服务器配合，通过head设置相关头来控制缓存<br>3、创建OkHttpClient时候需要配置Cache</p>
+<h4 id="二-流程"><a href="#二-流程" class="headerlink" title="(二)流程"></a>(二)流程</h4><ul>
+<li>如果配置了缓存，则从缓存中取出(可能为null)</li>
+<li>获取缓存的策略</li>
+<li>监测缓存</li>
+<li>如果禁止使用网络(比如飞行模式),且缓存无效，直接返回</li>
+<li>如果缓存有效，使用缓存，不使用网络</li>
+<li>如果缓存无效，执行下一个拦截器</li>
+<li>本地有缓存、根据条件判断是使用缓存还是使用网络的response</li>
+<li>把response缓存到本地</li>
+</ul>
+<h3 id="ConnectInterceptor拦截器"><a href="#ConnectInterceptor拦截器" class="headerlink" title="ConnectInterceptor拦截器"></a>ConnectInterceptor拦截器</h3><p>ConnectInterceptor是网络连接拦截器，我们知道在OkHttp当中真正的网络请求都是通过拦截器链来实现的，通过依次执行这个拦截器链上不同功能的拦截器来完成数据的响应，ConnectInterceptor的作用就是打开与服务器之间的连接，正式开启OkHttp的网络请求。</p>
+<p>总结：<br>首先ConnectInterceptor拦截器从拦截器链获取到前面传递过来的StreamAllocation，接着执行StreamAllocation的newStream方法创建HttpCodec，HttpCodec对象是用于处理我们的Request和Response。<br>最后将刚才创建的用于网络IO的RealConnection对象，以及对于服务器交互最为关键的HttpCodec等对象传递给后面的拦截器。</p>
+<h3 id="CallServerInterceptor拦截器"><a href="#CallServerInterceptor拦截器" class="headerlink" title="CallServerInterceptor拦截器"></a>CallServerInterceptor拦截器</h3><p>CallServerInterceptor拦截器主要作用是负责向服务器发起真正的网络请求，并获取返回结果。<br>CallServerInterceptor的intercept方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Override public Response intercept(Chain chain) throws IOException &#123;</span><br><span class="line">    RealInterceptorChain realChain = (RealInterceptorChain) chain;</span><br><span class="line">    HttpCodec httpCodec = realChain.httpStream();</span><br><span class="line">    StreamAllocation streamAllocation = realChain.streamAllocation();</span><br><span class="line">    RealConnection connection = (RealConnection) realChain.connection();</span><br><span class="line">    Request request = realChain.request();</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>intercept方法中先是获取五个对象，下面分别介绍这5个对象的含义。</p>
+<ul>
+<li>RealInterceptorChain：拦截器链，真正进行请求的地方。</li>
+<li>HttpCodec：在OkHttp中，它把所有的流对象都封装成了HttpCodec这个类，作用是编码Request，解码Response。</li>
+<li>StreamAllocation：建立HTTP连接所需要的网络组件。</li>
+<li>RealConnection：服务器与客户端的具体连接。</li>
+<li>Request：网络请求。</li>
+</ul>
+<h2 id="核心性能优化：okio"><a href="#核心性能优化：okio" class="headerlink" title="核心性能优化：okio"></a>核心性能优化：okio</h2><p><a href="https://www.jianshu.com/p/f5941bcf3a2d" target="_blank" rel="noopener">okio</a></p>
+<h4 id="一-、javaNIO和阻塞I-O："><a href="#一-、javaNIO和阻塞I-O：" class="headerlink" title="(一)、javaNIO和阻塞I/O："></a>(一)、javaNIO和阻塞I/O：</h4><ul>
+<li>阻塞I/O通信模式：调用InputStream.read()方法时是阻塞的，它会一直等到数据到来时才返回。</li>
+<li>NIO通信模式：在JDK1.4开始，是一种非阻塞I/O，在Java NIO的服务端由一个专门的线程来处理所有I/O事件，并负责分发；线程之间通讯通过wait和notify等方式。</li>
+</ul>
+<h4 id="二-、okio"><a href="#二-、okio" class="headerlink" title="(二)、okio"></a>(二)、okio</h4><p>okio是由square公司开发的，它补充了java.io和java.nio的不足，以便能够更加方便，快速的访问、存储和处理你的数据。OKHttp底层也是用该库作为支持。而且okio使用起来很简单，减少了很多io操作的基本代码，并且对内存和CPU使用做了优化，他的主要功能封装在ByteString和Buffer这两个类中。<br>okio的作者认为，javad的JDK对字节流和字符流进行分开定义这一世情，并不是那么优雅，所以在okio并不进行这样划分。具体的做法就是把比特数据都交给Buffer管理，然后Buff实现BufferedSource和BufferedSink这两个接口，最后通过调用buffer相应的方法对数据进行编码。</p>
+<p>读写操作这块的类图如下：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5713484-7404e49cbd97138f.png?imageMogr2/auto-orient/" alt="读写操作的类图"></p>
+<p>总体相关类结构如下：<br><img src="https://upload-images.jianshu.io/upload_images/5713484-7039ead52b1ae609.png?imageMogr2/auto-orient/" alt="总体相关类结构"></p>
+<p>大体流程如下：</p>
+<p>第一步，首先是调用okio的source(InputStream in)方法获取Source对象<br>第二步，调用okio的buffer(Source source)方法获取BufferedSource对象<br>第三步，调用BufferedSource的readUtf8()方法读取String对象<br>第四步，关闭BufferedSource</p>
+<p>读写总体流程：<br>1.构建缓冲池，缓冲源对象<br>2.读写操作<br>3.关闭缓冲池</p>
+<h4 id="okio的优雅之处"><a href="#okio的优雅之处" class="headerlink" title="okio的优雅之处"></a>okio的优雅之处</h4><p>类图：<br><img src="https://upload-images.jianshu.io/upload_images/5713484-e2af4e60b71bf432.png?imageMogr2/auto-orient/" alt="okio类图"></p>
+<p>读写流程图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5713484-42bef72907339ff5.png?imageMogr2/auto-orient/" alt="读写流程图"></p>
+<p>在说okio的设计模式之前，先说下okio这这个类，该类是一个大工厂，为我们创建出各种各样的Sink、Source 对象，提供了三种数据源InputStream/OutputStream、Socket、File，我们可以把本该对这个三类数据源的IO操作通过okio库来实现，更方便，更高效。</p>
+<p><strong>okio高效方便之处</strong></p>
+<p>1、它对数据进行了分块处理(Segment)，这样在大数据IO的时候可以以块为单位进行IO，这可以提高IO的吞吐率</p>
+<p>2、它对这些数据块使用链表来进行管理，这可以仅通过移动指针就进行数据的管理，而不用真正的处理数据，而且对扩容来说十分方便.</p>
+<p>3、闲置的块进行管理，通过一个块池(SegmentPool)的管理，避免系统GC和申请byte时的zero-fill。其他的还有一些小细节上的优化，比如如果你把一个UTF-8的String转化为ByteString，ByteString会保留一份对原来String的引用，这样当你下次需要decode这个String时，程序通过保留的引用直接返回对应的String，从而避免了转码过程。</p>
+<p>4、他为所有的Source、Sink提供了超时操作，这是在Java原生IO操作是没有的。</p>
+<p>5、okio它对数据的读写都进行了封装，调用者可以十分方便的进行各种值(Stringg,short,int,hex,utf-8,base64等)的转化。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/19/设计模式的6大基本原则/" rel="next" title="设计模式的6大基本原则">
+                <i class="fa fa-chevron-left"></i> 设计模式的6大基本原则
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/27/回首2018/" rel="prev" title="回首2018">
+                回首2018 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zEcong Chai" />
+          <p class="site-author-name" itemprop="name">zEcong Chai</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#OKHttp源码解析"><span class="nav-number">1.</span> <span class="nav-text">OKHttp源码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#整体结构图"><span class="nav-number">1.1.</span> <span class="nav-text">整体结构图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整体的流程图"><span class="nav-number">1.2.</span> <span class="nav-text">整体的流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五大拦截器"><span class="nav-number">1.3.</span> <span class="nav-text">五大拦截器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RetryAndFollowUpInterceptor拦截器"><span class="nav-number">1.3.1.</span> <span class="nav-text">RetryAndFollowUpInterceptor拦截器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BridgeInterceptor拦截器"><span class="nav-number">1.3.2.</span> <span class="nav-text">BridgeInterceptor拦截器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CacheInterceptor拦截器"><span class="nav-number">1.3.3.</span> <span class="nav-text">CacheInterceptor拦截器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一-原理和注意事项："><span class="nav-number">1.3.3.1.</span> <span class="nav-text">(一)原理和注意事项：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二-流程"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">(二)流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConnectInterceptor拦截器"><span class="nav-number">1.3.4.</span> <span class="nav-text">ConnectInterceptor拦截器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CallServerInterceptor拦截器"><span class="nav-number">1.3.5.</span> <span class="nav-text">CallServerInterceptor拦截器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心性能优化：okio"><span class="nav-number">1.4.</span> <span class="nav-text">核心性能优化：okio</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一-、javaNIO和阻塞I-O："><span class="nav-number">1.4.0.1.</span> <span class="nav-text">(一)、javaNIO和阻塞I/O：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二-、okio"><span class="nav-number">1.4.0.2.</span> <span class="nav-text">(二)、okio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#okio的优雅之处"><span class="nav-number">1.4.0.3.</span> <span class="nav-text">okio的优雅之处</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zEcong Chai</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

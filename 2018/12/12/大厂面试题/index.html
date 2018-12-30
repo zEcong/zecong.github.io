@@ -94,17 +94,17 @@
 
 
 
-<meta name="description" content="ViewStub 是一个不可见的，大小为0的View,最佳用途就是实现View的延迟加载，避免资源浪费，在需要的时候才加载View。在Android性能优化中广泛使用。在使用viewstub的时候要注意一点，viewstub只能inflate一次，而且setVisibility也会间接的调用到inflate，重复inflate会抛出异常：1java.lang.IllegalStateExcepti">
+<meta name="description" content="阿里UC：dvm和jvm的区别 class文件和dex文件有什么区别 虚拟进程空间，用户空间和系统空间分别是做什么的 http和https的区别，https是怎么认证的 binder机制 stackoverflowError和OutOfMenoryError如何发生的 retrofit实现，使用场景 okhttp和retrofit的区别 httpurlconnection,httpclient,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="避免ViewStub重复填充">
-<meta property="og:url" content="http://yoursite.com/2017/10/03/ViewStub/index.html">
+<meta property="og:title" content="大厂面试题">
+<meta property="og:url" content="http://yoursite.com/2018/12/12/大厂面试题/index.html">
 <meta property="og:site_name" content="zEcong Chai&#39;s Blog">
-<meta property="og:description" content="ViewStub 是一个不可见的，大小为0的View,最佳用途就是实现View的延迟加载，避免资源浪费，在需要的时候才加载View。在Android性能优化中广泛使用。在使用viewstub的时候要注意一点，viewstub只能inflate一次，而且setVisibility也会间接的调用到inflate，重复inflate会抛出异常：1java.lang.IllegalStateExcepti">
+<meta property="og:description" content="阿里UC：dvm和jvm的区别 class文件和dex文件有什么区别 虚拟进程空间，用户空间和系统空间分别是做什么的 http和https的区别，https是怎么认证的 binder机制 stackoverflowError和OutOfMenoryError如何发生的 retrofit实现，使用场景 okhttp和retrofit的区别 httpurlconnection,httpclient,">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-19T08:48:24.144Z">
+<meta property="og:updated_time" content="2018-12-30T07:48:41.990Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="避免ViewStub重复填充">
-<meta name="twitter:description" content="ViewStub 是一个不可见的，大小为0的View,最佳用途就是实现View的延迟加载，避免资源浪费，在需要的时候才加载View。在Android性能优化中广泛使用。在使用viewstub的时候要注意一点，viewstub只能inflate一次，而且setVisibility也会间接的调用到inflate，重复inflate会抛出异常：1java.lang.IllegalStateExcepti">
+<meta name="twitter:title" content="大厂面试题">
+<meta name="twitter:description" content="阿里UC：dvm和jvm的区别 class文件和dex文件有什么区别 虚拟进程空间，用户空间和系统空间分别是做什么的 http和https的区别，https是怎么认证的 binder机制 stackoverflowError和OutOfMenoryError如何发生的 retrofit实现，使用场景 okhttp和retrofit的区别 httpurlconnection,httpclient,">
 
 
 
@@ -133,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/10/03/ViewStub/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/12/12/大厂面试题/"/>
 
 
 
 
 
-  <title>避免ViewStub重复填充 | zEcong Chai's Blog</title>
+  <title>大厂面试题 | zEcong Chai's Blog</title>
   
 
 
@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/03/ViewStub/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/12/大厂面试题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zEcong Chai">
@@ -279,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">避免ViewStub重复填充</h1>
+          <h1 class="post-title" itemprop="name headline">大厂面试题</h1>
         
 
         <div class="post-meta">
@@ -291,8 +291,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-03T21:16:32+08:00">
-                2017-10-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-12T00:00:00+08:00">
+                2018-12-12
               </time>
             
 
@@ -329,15 +329,71 @@
       
 
       
-        <p>ViewStub 是一个不可见的，大小为0的View,最佳用途就是实现View的延迟加载，避免资源浪费，在需要的时候才加载View。在Android性能优化中广泛使用。<br>在使用viewstub的时候要注意一点，viewstub只能inflate一次，而且setVisibility也会间接的调用到inflate，重复inflate会抛出异常：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.lang.IllegalStateException:ViewStub must have a non-null ViewGroup viewParent</span><br></pre></td></tr></table></figure></p>
-<p>解决方法为设置一个Boolean类型的变量，标记viewstub是否已经inflate，如果viewstub还未inflate则执行初始化操作，反之则不进行操作。其中要使用<strong>ViewStub中的OnInflateListener()</strong>监听事件来判断是否已经填充,从而保证<strong>viewstub</strong>不重复的<strong>inflate</strong>。</p>
-<p><strong>解决方法：</strong></p>
-<p>1.定义boolean变量和ViewStub</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">boolean isInflate = false;</span><br><span class="line">ViewStub mViewStub;</span><br></pre></td></tr></table></figure>
-<p>2.初始化ViewStub，并为ViewStub添加OnInflateListener()监听事件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mViewStub = (ViewStub)findViewById(R.id.viewstub_match_single);</span><br><span class="line"></span><br><span class="line">    mViewStub.setOnInflateListener(new OnInflateListener() &#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onInflate(ViewStub stub, View inflated) &#123;</span><br><span class="line"></span><br><span class="line">            isInflate = true;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
-<p>3.填充ViewStub</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">private void initViewStub()&#123;//填充ViewStub的方法</span><br><span class="line">        if(!isInflate)&#123;//如果没有填充则执行inflate操作</span><br><span class="line">            View view = stubMatchSingle.inflate();</span><br><span class="line">            //初始化ViewStub的layout里面的控件</span><br><span class="line">            TextView mTv = (TextView) view.findViewById(R.id.txt_url);</span><br><span class="line">            mTv.setOnClickListener(this);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+        <h1 id="阿里UC："><a href="#阿里UC：" class="headerlink" title="阿里UC："></a>阿里UC：</h1><p>dvm和jvm的区别</p>
+<p>class文件和dex文件有什么区别</p>
+<p>虚拟进程空间，用户空间和系统空间分别是做什么的</p>
+<p>http和https的区别，https是怎么认证的</p>
+<p>binder机制</p>
+<p>stackoverflowError和OutOfMenoryError如何发生的</p>
+<p>retrofit实现，使用场景</p>
+<p>okhttp和retrofit的区别</p>
+<p>httpurlconnection,httpclient, 和okhttp的区别</p>
+<p>handler,message,thread, messageQueue, Looper 之间的关系</p>
+<p>虚拟机内存如何划分的？</p>
+<p>gc机制和对应的算法</p>
+<p>app启动过程，ActivityThread相关</p>
+<p>如何跨进程访问</p>
+<p>如果传递大型数据</p>
+<p>项目主要做什么，最有成就的是做了什么？还有优化的空间吗？如何优化？</p>
+<p>以后想怎么发展，自己还有什么可以提升的空间</p>
+<h1 id="美团（北京）"><a href="#美团（北京）" class="headerlink" title="美团（北京）"></a>美团（北京）</h1><p>1、两种序列化的差异；</p>
+<p>2、安卓打包流程；</p>
+<p>3、wms框架，gc的原理；</p>
+<p>4、内存优化的方式；</p>
+<p>5、anr如何分析；</p>
+<h1 id="网易（北京）"><a href="#网易（北京）" class="headerlink" title="网易（北京）"></a>网易（北京）</h1><p>候选人A</p>
+<ol>
+<li><p>int a=123 转换成 321；</p>
+</li>
+<li><p>网络缓存最适合用哪种数据结构；</p>
+</li>
+<li><p>hashmap原理；</p>
+</li>
+<li><p>性能优化冷启动；</p>
+</li>
+<li><p>单例模式懒汉式怎么保障单例模式；</p>
+</li>
+</ol>
+<p>6.adapter公共类怎么实现；</p>
+<p>候选人B<br>1.网易面了两轮技术面，一共1小时左右</p>
+<p>2.第一轮技术面，问的比较基础；第二轮技术面，问得比较深入，还要求用笔写下来：<br>基础技术点: view的事件响应</p>
+<p>手写技术点: </p>
+<p>1 反射机制的原理与实现手写例程。</p>
+<p>2 注解的应用及例程。</p>
+<p>3 json解析的各优缺点与区别</p>
+<p>3.二轮面试官语速比较快，比较严格，男的，问了一下目前薪资和期望薪资，然后让等HR消息。</p>
+<p>4.网易的面试深度相对还可以，但是要求技术点要非常熟练。</p>
+<h1 id="蚂蚁金服："><a href="#蚂蚁金服：" class="headerlink" title="蚂蚁金服："></a>蚂蚁金服：</h1><p>第一轮电面：httpurlconnection,httpclient, 和okhttp的区别<br>handler,message,thread, messageQueue, Looper 之间的关系</p>
+<p>安卓页面是如何绘制的</p>
+<p>了解程序加锁的几种方式</p>
+<p>Android中SyncTask的使用相关</p>
+<p>gc回收机制</p>
+<p>其它比较熟悉哪些前端的知识：比如kotlin，js，小程序   eg.</p>
+<p>自己写过网络框架么，如何实现的</p>
+<p>数据库遇到哪些问题，如何解决的</p>
+<h1 id="UC国内用户组"><a href="#UC国内用户组" class="headerlink" title="UC国内用户组"></a>UC国内用户组</h1><p>1.怎么做耗电优化</p>
+<p>2.导致耗电的操作有哪些</p>
+<p>3.怎么做内存优化，举例你优化过的案例</p>
+<p>4.导致内存泄露的原因，案例</p>
+<p>5.怎么做网络优化</p>
+<p>6.动态加载的原理</p>
+<p>7.谈一个你做过的项目的总体架构，为什么这样设计，针对这个深入提问</p>
+<p>8.什么时候可以考虑代码重构</p>
+<p>9.代码重构要注意什么</p>
+<p>10.你重构、优化过的模块，深入提问。</p>
+<p>11.你在联运主要负责什么</p>
+<p>12.怎么优化sdk的大小，性能，内存</p>
+
       
     </div>
     
@@ -361,8 +417,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/24/Activity启动的概要流程/" rel="next" title="Activity启动的概要流程">
-                <i class="fa fa-chevron-left"></i> Activity启动的概要流程
+              <a href="/2018/10/02/Android P及刘屏适配/" rel="next" title="Android 刘海屏及9.0适配">
+                <i class="fa fa-chevron-left"></i> Android 刘海屏及9.0适配
               </a>
             
           </div>
@@ -371,8 +427,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/01/12/性能优化/" rel="prev" title="Android性能优化">
-                Android性能优化 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/12/19/设计模式的6大基本原则/" rel="prev" title="设计模式的6大基本原则">
+                设计模式的6大基本原则 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -425,8 +481,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -470,6 +535,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#阿里UC："><span class="nav-number">1.</span> <span class="nav-text">阿里UC：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#美团（北京）"><span class="nav-number">2.</span> <span class="nav-text">美团（北京）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网易（北京）"><span class="nav-number">3.</span> <span class="nav-text">网易（北京）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#蚂蚁金服："><span class="nav-number">4.</span> <span class="nav-text">蚂蚁金服：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UC国内用户组"><span class="nav-number">5.</span> <span class="nav-text">UC国内用户组</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
