@@ -94,19 +94,17 @@
 
 
 
-<meta name="description" content="IPC全称 Inter-Process Communication 是进程间通信，是指两个进程间进行数据交换的过程。 IPC机制的使用场景（1）Android对单个应用使用的最大内存做了限制(16M)，需要获取更多的内存.（2）当前应用需要向其他应用获取数据 开启多进程模式的唯一方法是在清单文件中设置process属性。   例如 android:process=”:remote” 或 andro">
+<meta name="description" content="HTTP头部信息General：HTTP的请求方法： 安全的方法：GET、HEAD、POST、PUT、DELETE、OPTIONS、TRACE 扩展方法：LOCK、MKCOL、COPY、MOVE  GET：向web服务器请求一个文件； HEAD：检查一个对象是否存在，跟GET相似，但其不需要服务发送资源而仅传回响应首部； POST：向web服务器发送数据让web服务器进行处理，支持HTML表单提交">
 <meta property="og:type" content="article">
-<meta property="og:title" content="跨进程通信">
-<meta property="og:url" content="http://yoursite.com/2017/04/23/跨进程间通信/index.html">
+<meta property="og:title" content="Http头部信息">
+<meta property="og:url" content="http://yoursite.com/2014/12/25/HTTP头部信息/index.html">
 <meta property="og:site_name" content="zEcong Chai&#39;s Blog">
-<meta property="og:description" content="IPC全称 Inter-Process Communication 是进程间通信，是指两个进程间进行数据交换的过程。 IPC机制的使用场景（1）Android对单个应用使用的最大内存做了限制(16M)，需要获取更多的内存.（2）当前应用需要向其他应用获取数据 开启多进程模式的唯一方法是在清单文件中设置process属性。   例如 android:process=”:remote” 或 andro">
+<meta property="og:description" content="HTTP头部信息General：HTTP的请求方法： 安全的方法：GET、HEAD、POST、PUT、DELETE、OPTIONS、TRACE 扩展方法：LOCK、MKCOL、COPY、MOVE  GET：向web服务器请求一个文件； HEAD：检查一个对象是否存在，跟GET相似，但其不需要服务发送资源而仅传回响应首部； POST：向web服务器发送数据让web服务器进行处理，支持HTML表单提交">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1648651-cef2e9178b3b5b0d.png?imageMogr2/auto-orient/">
-<meta property="og:updated_time" content="2018-07-13T07:02:37.226Z">
+<meta property="og:updated_time" content="2019-01-02T10:39:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="跨进程通信">
-<meta name="twitter:description" content="IPC全称 Inter-Process Communication 是进程间通信，是指两个进程间进行数据交换的过程。 IPC机制的使用场景（1）Android对单个应用使用的最大内存做了限制(16M)，需要获取更多的内存.（2）当前应用需要向其他应用获取数据 开启多进程模式的唯一方法是在清单文件中设置process属性。   例如 android:process=”:remote” 或 andro">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1648651-cef2e9178b3b5b0d.png?imageMogr2/auto-orient/">
+<meta name="twitter:title" content="Http头部信息">
+<meta name="twitter:description" content="HTTP头部信息General：HTTP的请求方法： 安全的方法：GET、HEAD、POST、PUT、DELETE、OPTIONS、TRACE 扩展方法：LOCK、MKCOL、COPY、MOVE  GET：向web服务器请求一个文件； HEAD：检查一个对象是否存在，跟GET相似，但其不需要服务发送资源而仅传回响应首部； POST：向web服务器发送数据让web服务器进行处理，支持HTML表单提交">
 
 
 
@@ -135,13 +133,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/04/23/跨进程间通信/"/>
+  <link rel="canonical" href="http://yoursite.com/2014/12/25/HTTP头部信息/"/>
 
 
 
 
 
-  <title>跨进程通信 | zEcong Chai's Blog</title>
+  <title>Http头部信息 | zEcong Chai's Blog</title>
   
 
 
@@ -264,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/23/跨进程间通信/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/12/25/HTTP头部信息/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zEcong Chai">
@@ -281,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">跨进程通信</h1>
+          <h1 class="post-title" itemprop="name headline">Http头部信息</h1>
         
 
         <div class="post-meta">
@@ -293,8 +291,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-23T00:21:22+08:00">
-                2017-04-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-12-25T00:00:00+08:00">
+                2014-12-25
               </time>
             
 
@@ -331,29 +329,47 @@
       
 
       
-        <p>IPC全称 Inter-Process Communication 是进程间通信，是指两个进程间进行数据交换的过程。</p>
-<h4 id="IPC机制的使用场景"><a href="#IPC机制的使用场景" class="headerlink" title="IPC机制的使用场景"></a>IPC机制的使用场景</h4><p>（1）Android对单个应用使用的最大内存做了限制(16M)，需要获取更多的内存.<br>（2）当前应用需要向其他应用获取数据</p>
-<p>开启多进程模式的唯一方法是在清单文件中设置process属性。  </p>
-<p>例如 android:process=”:remote” 或 android:process=”com.lzx.app.remote”<br>第一种是一种简写，完整是这样的：android:process=”com.lzx.app:remote” 第二种是一种完整的写法，带有“:”符号的属于当前应用的私有进程</p>
-<h4 id="Parcelable接口"><a href="#Parcelable接口" class="headerlink" title="Parcelable接口"></a>Parcelable接口</h4><p>Parcelable接口是Android中实现序列化和反序列化的接口。并可以通过Intent和Binder传递。</p>
-<p>注意Parcelable接口中的Parcel参数，Parcel是一个偏底层的东西。内部包装了可序列化的数据，可以在Binder中自由传输。</p>
-<p>序列化功能由writeToParcel方法来完成，通过Parcel的一系列wirte方法来完成的。</p>
-<p>反序列化功能由CREATOR来完成，内部表明了如何创建序列化对象和数组，通过Parcel的一系列read方法完成</p>
-<h4 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h4><ul>
-<li>Binder非常复杂和重要，它继承了IBinder接口。</li>
-<li>从IPC角度看，Binder是Android中一种跨进程通信的方式。</li>
-<li>从Android Framework角度看，Binder是ServiceManager连接各种Manager(ActivityManager、WindowManager)和相应ManagerService的桥梁</li>
-<li>从应用层的角度看，Binder是客户端和服务端进行通信的媒介</li>
-<li>在开发中，Binder主要用在Service，如果是普通的Service，Binder不涉及进程间通信。</li>
+        <h1 id="HTTP头部信息"><a href="#HTTP头部信息" class="headerlink" title="HTTP头部信息"></a>HTTP头部信息</h1><h2 id="General："><a href="#General：" class="headerlink" title="General："></a>General：</h2><h3 id="HTTP的请求方法："><a href="#HTTP的请求方法：" class="headerlink" title="HTTP的请求方法："></a>HTTP的请求方法：</h3><ul>
+<li>安全的方法：GET、HEAD、POST、PUT、DELETE、OPTIONS、TRACE</li>
+<li>扩展方法：LOCK、MKCOL、COPY、MOVE</li>
 </ul>
-<h4 id="Android中的IPC方式"><a href="#Android中的IPC方式" class="headerlink" title="Android中的IPC方式"></a>Android中的IPC方式</h4><p>（1）Bundle<br>因为Intent支持传递Bundle数据，而且Bundle实现了Parcelable接口，所以可以方便的进行进程间传输。</p>
-<p>（2）使用文件共享<br>使用文件要注意一个问题，就是并发读/写的问题，有可能读出的内容有可能不是最新的，并发写的话就更严重，<br>因此尽量避免并发写这种情况的发生或者靠虑使用线程同步来限制多个线程的写操作。<br>注意，SharedPreferences是个特例，虽然它属于文件的一种，但是系统对它的读/写有一定的缓存策略，所以在多进程模式下，<br>系统对它的读/写变得不可靠，当面对高并发的读/写时，SharedPreferences很大几率会丢失数据。<br>所以，不建议在进程间通信中使用SharedPreferences。</p>
-<p>（3）使用Messenger<br>Messenger通过它可以在不同进程中传递Message对象。底层实现是AIDL。构造方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public Messenger(Handler target)&#123;</span><br><span class="line">   mTarget = target.getIMessenger();</span><br><span class="line">&#125;</span><br><span class="line">public Messenger(IBinder target)&#123;</span><br><span class="line">   mTarget = IMessenger.Stub.asInterface(target);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>同时它一次处理一个请求，因此在服务端不用考虑线程同步问题。因为Messenger是以串行的方式处理客户端发来的消息，如果大量消息同时发送，服务端只能一条条处理。</p>
-<p>（4）使用AIDL<br><a href="https://github.com/GeniusVJR/LearningNotes/blob/master/Part1/Android/AIDL.md" target="_blank" rel="noopener">AIDL</a></p>
-<p>（5）使用ContentProvider<br>ContentProvider是Android中提供的专门用于不同应用间进行数据共享的方式。实现增删查改方法。如果要扩展，实现call方法。</p>
-<p>（6）使用Socket<br>Socket可以实现终端与终端之间的通信，那么它肯定可以实现进程之间的通信，不过用得较少，因为它是比较偏网络方面的。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/1648651-cef2e9178b3b5b0d.png?imageMogr2/auto-orient/" alt="contrast.png"></p>
+<p>GET：向web服务器请求一个文件；</p>
+<p>HEAD：检查一个对象是否存在，跟GET相似，但其不需要服务发送资源而仅传回响应首部；</p>
+<p>POST：向web服务器发送数据让web服务器进行处理，支持HTML表单提交，表单中有用户填入的数据，这些数据会发送到服务器端，由服务器存储至某位置（例如发送处理程序）；</p>
+<p>PUT：与GET相反，向服务写入文档；发布系统；</p>
+<p>DELETE：请求删除URL指向的资源；</p>
+<p>OPTIONS：探测服务器端对某资源所支持的请求方法</p>
+<p>TRACE：追踪请求资源要经过的防火墙、代理或网关等</p>
+<h3 id="响应报文代码"><a href="#响应报文代码" class="headerlink" title="响应报文代码"></a>响应报文代码</h3><ul>
+<li><p>1XX：信息性状态码<br>  100：继续<br>  101：分组交换协议     </p>
+</li>
+<li><p>2XX：成功状态码<br>  200：OK<br>  201：Created OK<br>  202：被采纳<br>  203：非授权信息<br>  204：无内容<br>  205：重置内容<br>  206：部分内容        </p>
+</li>
+<li><p>3XX：重定向状态码<br>  301：Moved Permanebtly 永久重定向，在响应报文中使用首    部“Location：URL”指定资源现在所在的位置<br>  302：Found 临时重定向，在响应报文中使用首部“Location：    URL”指定临时资源位置<br>  304：Not Modified，条件式请求中使用<br>  305：使用代理     </p>
+</li>
+<li><p>4XX：客户端的错误<br>  400：错误请求<br>  401：未授权<br>  403：Forbidden,请求被服务器拒绝<br>  404：Not Found，服务器无法找到请求的URL<br>  405：Method Not Allowed,不允许使用此方法请求响应的URL </p>
+</li>
+<li><p>5XX：服务器类的错误<br>  500：Internal Server Error，服务器内部错误             502：Bad Gateway：代理服务器从上游收到一条伪响应             503：Service Unavailable，服务器此时无法提供服务，但将来可    能可用</p>
+<h3 id="HTTP头部信息-1"><a href="#HTTP头部信息-1" class="headerlink" title="HTTP头部信息"></a>HTTP头部信息</h3><p>每个HTTP请求和响应都会带有相应的头部信息，XHR对象也提供了操作这两种头部（请求头部和响应头部）信息的方法。</p>
+</li>
+<li><p>(1)默认情况下，在发送XHR请求（request）的同时，还会发送下列头部信息：</p>
+<p>  Accept:浏览器能够显示的字符集。</p>
+<p>  Accept-Charset:浏览器能够显示的字符集。</p>
+<p>  Accept-Encoding:浏览器能够处理的压缩编码。</p>
+<p>  Accept-Language:浏览器当前设置的语言。</p>
+<p>  Connection: 浏览器与服务器之间的连接类型。</p>
+<p>  Cookie:当前页面设置的任何cookie</p>
+<p>  Host:发出请求的页面所在域。</p>
+<p>  Referer:发出请求的页面的URL.(该单词正确拼法是referrer)</p>
+<p>  User-Agent:浏览器的用户代理字符串。</p>
+</li>
+</ul>
+<p>不同浏览器实际发送的头部信息会有所不同，但以上列出的基本上是所有浏览器都会发送的。</p>
+<ul>
+<li>(2)操作HTTP头部信息的几个方法（具体使用方法查看前面说明）：<br>.setRequestHeader(“name”,”value”)</li>
+</ul>
+<p>.getResponseHeader(‘name’)</p>
+<p>.getAllResponseHeaders()</p>
 
       
     </div>
@@ -378,8 +394,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/19/SurfaceView和TextureView区别分析/" rel="next" title="SurfaceView和TextureView的区别">
-                <i class="fa fa-chevron-left"></i> SurfaceView和TextureView的区别
+              <a href="/2014/10/13/Acticity的生命周期，Activity异常退出该如何处理_/" rel="next" title="Activity生命周期">
+                <i class="fa fa-chevron-left"></i> Activity生命周期
               </a>
             
           </div>
@@ -388,8 +404,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/04/24/Activity启动的概要流程/" rel="prev" title="Activity启动的概要流程">
-                Activity启动的概要流程 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/01/20/Handler/" rel="prev" title="Android的消息机制">
+                Android的消息机制 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -506,7 +522,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#IPC机制的使用场景"><span class="nav-number">1.</span> <span class="nav-text">IPC机制的使用场景</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Parcelable接口"><span class="nav-number">2.</span> <span class="nav-text">Parcelable接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Binder"><span class="nav-number">3.</span> <span class="nav-text">Binder</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Android中的IPC方式"><span class="nav-number">4.</span> <span class="nav-text">Android中的IPC方式</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP头部信息"><span class="nav-number">1.</span> <span class="nav-text">HTTP头部信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#General："><span class="nav-number">1.1.</span> <span class="nav-text">General：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP的请求方法："><span class="nav-number">1.1.1.</span> <span class="nav-text">HTTP的请求方法：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#响应报文代码"><span class="nav-number">1.1.2.</span> <span class="nav-text">响应报文代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP头部信息-1"><span class="nav-number">1.1.3.</span> <span class="nav-text">HTTP头部信息</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
